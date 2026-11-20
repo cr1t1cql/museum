@@ -1,0 +1,32 @@
+[
+  {
+    "id": "drone",
+    "type": "model",
+    "wing": "north",
+    "title": "A Drone for a Restored World",
+    "year": "2050 (imagined)",
+    "origin": "Future climate restoration programs",
+    "description": "A sample 3D exhibit. Replace this paragraph with the story of your actual artifact.",
+    "model": "models/drone.glb",
+    "position": [0, 0, -20],
+    "targetSize": 1.9,
+    "pedestalWidth": 2.1,
+    "pedestalDepth": 2.1,
+    "interactionDistance": 2.7,
+    "spinSpeed" : 0.3
+  },
+  {
+    "id": "original-picture",
+    "type": "image",
+    "wing": "west",
+    "title": "A Greener Future",
+    "year": "2050 (imagined)",
+    "origin": "Museum of Tomorrow",
+    "description": "The first picture exhibit from the original museum prototype, moved into the west wing.",
+    "image": "images/artifact.jpg",
+    "position": [-22, 1.8, -4.82],
+    "width": 2.4,
+    "height": 1.6,
+    "interactionDistance": 2.5
+  }
+]

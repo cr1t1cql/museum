@@ -1,560 +1,185 @@
-
 import * as THREE from 'three';
+import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+import { buildWorld, SPAWN_POINTS } from './world.js';
+import { loadExhibits } from './exhibits.js';
+import { updateModels } from './modelLoader.js';
 import './style.css';
-import { PointerLockControls }
-    from 'three/addons/controls/PointerLockControls.js';
 
-
-// ================================
-// 1. SCENE
-// ================================
-
+// Scene and renderer stay here; geometry and exhibit assets live in modules.
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xe8ebe5);
+const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 120);
+// To debug from the foyer, open: ?spawn=foyer
+// Or change DEFAULT_SPAWN to 'foyer' to start there every time.
+const DEFAULT_SPAWN = 'waiting';
+const requestedSpawn = new URLSearchParams(window.location.search).get('spawn');
+const spawnName = Object.hasOwn(SPAWN_POINTS, requestedSpawn) ? requestedSpawn : DEFAULT_SPAWN;
+camera.position.copy(SPAWN_POINTS[spawnName]);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+document.getElementById('scene-container').appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x888888, 2));
+const sun = new THREE.DirectionalLight(0xffffff, 1.5);
+sun.position.set(3, 8, 5);
+scene.add(sun);
 
-// ================================
-// 2. CAMERA
-// ================================
-
-const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    100
-);
-
-camera.position.set(0, 1.65, 4);
-
-// ================================
-// 3. RENDERER
-// ================================
-
-const renderer = new THREE.WebGLRenderer({
-    antialias: true
-});
-
-renderer.setSize(
-    window.innerWidth,
-    window.innerHeight
-);
-
-renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio, 2)
-);
-
-document
-    .getElementById('scene-container')
-    .appendChild(renderer.domElement);
-
-// ================================
-// 4. LIGHTING
-// ================================
-
-const ambientLight = new THREE.HemisphereLight(
-    0xffffff,
-    0x888888,
-    2
-);
-
-scene.add(ambientLight);
-
-const directionalLight = new THREE.DirectionalLight(
-    0xffffff,
-    1.5
-);
-
-directionalLight.position.set(3, 8, 5);
-scene.add(directionalLight);
-
-
-// ================================
-// 5. MUSEUM GEOMETRY
-// ================================
-
-function createBox(width, height, depth, color, x, y, z) {
-
-    const geometry = new THREE.BoxGeometry(
-        width,
-        height,
-        depth
-    );
-
-    const material = new THREE.MeshStandardMaterial({
-        color: color,
-        roughness: 0.9
-    });
-
-    const mesh = new THREE.Mesh(geometry, material);
-
-    mesh.position.set(x, y, z);
-
-    scene.add(mesh);
-
-    return mesh;
+const world = buildWorld(scene);
+let exhibits = [];
+try {
+  // Exhibit metadata is bundled by Vite; no fetch/404/HTML-as-JSON errors.
+  exhibits = loadExhibits(scene, world.addObstacle);
+} catch (error) {
+  console.error('Failed to initialize exhibits:', error);
 }
 
-
-const ROOM_SIZE = 12;
-const WALL_HEIGHT = 3.5;
-const WALL_THICKNESS = 0.2;
-
-const halfRoom = ROOM_SIZE / 2;
-
-const wallColor = 0xf0efe8;
-const floorColor = 0xb6beb4;
-
-// Floor
-createBox(
-    ROOM_SIZE, 0.2, ROOM_SIZE,
-    floorColor,
-    0, -0.1, 0
-);
-
-// North wall
-createBox(
-    ROOM_SIZE, WALL_HEIGHT, WALL_THICKNESS,
-    wallColor,
-    0, WALL_HEIGHT / 2, -halfRoom
-);
-
-// South wall
-createBox(
-    ROOM_SIZE, WALL_HEIGHT, WALL_THICKNESS,
-    wallColor,
-    0, WALL_HEIGHT / 2, halfRoom
-);
-
-// West wall
-createBox(
-    WALL_THICKNESS, WALL_HEIGHT, ROOM_SIZE,
-    wallColor,
-    -halfRoom, WALL_HEIGHT / 2, 0
-);
-
-// East wall
-createBox(
-    WALL_THICKNESS, WALL_HEIGHT, ROOM_SIZE,
-    wallColor,
-    halfRoom, WALL_HEIGHT / 2, 0
-);
-
-// Ceiling
-createBox(
-    ROOM_SIZE, 0.2, ROOM_SIZE,
-    0xe8e8e3,
-    0, WALL_HEIGHT + 0.1, 0
-);
-
-createBox(2, 1, 3, 0xffffff, 5, 0.5, 0);
-
-// ================================
-// 6. PLAYER CONTROLS
-// ================================
-
-const controls = new PointerLockControls(
-    camera,
-    document.body
-);
-
+const controls = new PointerLockControls(camera, document.body);
 const menu = document.getElementById('menu');
 const hud = document.getElementById('hud');
-
-const enterButton =
-    document.getElementById('enter-button');
-
-const exhibitPanel =
-    document.getElementById('exhibit-panel');
-
-let readingExhibit = false;
-
-enterButton.addEventListener('click', () => {
-    controls.lock();
-});
-
-controls.addEventListener('lock', () => {
-
-    menu.hidden = true;
-    hud.hidden = false;
-
-});
-
-controls.addEventListener('unlock', () => {
-
-    hud.hidden = true;
-
-    if (!readingExhibit) {
-        menu.hidden = false;
-        enterButton.textContent = 'Resume Exploring';
-    }
-
-});
-
-
-// ================================
-// 7. KEYBOARD INPUT
-// ================================
-
+const enterButton = document.getElementById('enter-button');
+const exhibitPanel = document.getElementById('exhibit-panel');
+const interactionPrompt = document.getElementById('interaction-prompt');
 const keys = {};
-
-window.addEventListener('keydown', (event) => {
-    keys[event.code] = true;
-});
-
-window.addEventListener('keyup', (event) => {
-    keys[event.code] = false;
-});
+let readingExhibit = false;
+let activeExhibit = null;
+const WALK_SPEED = 2.5;
+const RUN_SPEED = 5.0;
+const PLAYER_HEIGHT = 1.65; // eye height in meters, with feet at Y = 0
+const PLAYER_RADIUS = 0.3;
+const JUMP_SPEED = 5.5;     // initial upwards velocity, meters/second
+const GRAVITY = 14;        // downward acceleration, meters/second squared
+let verticalVelocity = 0;
+let grounded = true;
 
 function clearKeys() {
-    for (const key in keys) {
-        keys[key] = false;
-    }
+  for (const key in keys) keys[key] = false;
 }
 
-window.addEventListener('blur', clearKeys);
-controls.addEventListener('unlock', clearKeys);
-
-
-// ================================
-// 8. MOVEMENT AND COLLISION
-// ================================
-
-const PLAYER_SPEED = 2.5;
-const SPRINT_SPEED = 5.0;
-const PLAYER_HEIGHT = 1.65;
-const PLAYER_RADIUS = 0.3;
-
-const GRAVITY = 9.81;
-const JUMP_SPEED = 4.0;
-
-let verticalVelocity = 0;
-let isGrounded = true;
-
-function updateMovement(dt) {
-
-    if (!controls.isLocked || readingExhibit) {
-        return;
-    }
-
-    let forward = 0;
-    let sideways = 0;
-
-    if (keys['KeyW']) forward += 1;
-    if (keys['KeyS']) forward -= 1;
-
-    if (keys['KeyD']) sideways += 1;
-    if (keys['KeyA']) sideways -= 1;
-
-    // Normalize diagonal movement
-    const magnitude = Math.hypot(
-        forward,
-        sideways
-    );
-
-  if (magnitude > 0) {
-
-      forward /= magnitude;
-      sideways /= magnitude;
-
-      // Determine whether the player is sprinting
-      const isSprinting =
-          keys['ShiftLeft'] || keys['ShiftRight'];
-
-      const speed = isSprinting
-          ? SPRINT_SPEED
-          : PLAYER_SPEED;
-
-      controls.moveForward(
-          forward * speed * dt
-      );
-
-      controls.moveRight(
-          sideways * speed * dt
-      );
-  }
-
-    // Keep player inside the room
-    const boundary =
-        halfRoom - WALL_THICKNESS / 2 - PLAYER_RADIUS;
-
-    camera.position.x = THREE.MathUtils.clamp(
-        camera.position.x,
-        -boundary,
-        boundary
-    );
-
-    camera.position.z = THREE.MathUtils.clamp(
-        camera.position.z,
-        -boundary,
-        boundary
-    );
-
-  window.addEventListener('keydown', (event) => {
-      if (
-          event.code === 'Space' &&
-          !event.repeat &&
-          controls.isLocked &&
-          !readingExhibit &&
-          isGrounded
-      ) {
-          verticalVelocity = JUMP_SPEED;
-          isGrounded = false;
-      }
-  });
-
-  // Apply gravity
-  verticalVelocity -= GRAVITY * dt;
-
-  // Update vertical position
-  camera.position.y += verticalVelocity * dt;
-
-  // Floor collision
-  if (camera.position.y <= PLAYER_HEIGHT) {
-      camera.position.y = PLAYER_HEIGHT;
-      verticalVelocity = 0;
-      isGrounded = true;
-  }
-}
-
-// ================================
-// 10. RENDER LOOP
-// ================================
-let previousTime = performance.now();
-
-renderer.setAnimationLoop(() => {
-
-    const currentTime = performance.now();
-
-    const dt = Math.min(
-        (currentTime - previousTime) / 1000,
-        0.05
-    );
-
-    previousTime = currentTime;
-
-    updateMovement(dt);
-    updateInteraction();
-
-    renderer.render(scene, camera);
-
+enterButton.addEventListener('click', () => controls.lock());
+controls.addEventListener('lock', () => {
+  menu.hidden = true;
+  hud.hidden = false;
 });
-
-// ================================
-// 11. EXHIBIT DATA
-// ================================
-
-const exhibit = {
-
-    id: 'exhibit-01',
-
-    title: 'hexapjack',
-
-    year: '2021',
-
-    origin: 'the jack',
-
-    image: import.meta.env.BASE_URL
-        + 'images/artifact.jpg',
-
-    width: 2.4,
-    height: 1.6,
-
-    position: new THREE.Vector3(
-        0,
-        1.8,
-        -5.75
-    ),
-
-    interactionDistance: 2.5,
-
-    description:
-        'This exhibit represents a possible future '
-        + 'in which technological innovation and '
-        + 'collective action have enabled environmental '
-        + 'restoration on a global scale.'
-
-};
-
-// ================================
-// 11. CREATE PICTURE EXHIBIT
-// ================================
-
-function createPictureExhibit(data) {
-
-    // Wooden frame backing
-    createBox(
-        data.width + 0.12,
-        data.height + 0.12,
-        0.08,
-        0x594b39,
-        data.position.x,
-        data.position.y,
-        data.position.z
-    );
-
-    // White border / mat
-    createBox(
-        data.width + 0.04,
-        data.height + 0.04,
-        0.02,
-        0xffffff,
-        data.position.x,
-        data.position.y,
-        data.position.z + 0.045
-    );
-
-    const textureLoader = new THREE.TextureLoader();
-
-    textureLoader.load(data.image, (texture) => {
-
-        texture.colorSpace = THREE.SRGBColorSpace;
-
-        const geometry = new THREE.PlaneGeometry(
-            data.width,
-            data.height
-        );
-
-        const material = new THREE.MeshBasicMaterial({
-            map: texture
-        });
-
-        const picture = new THREE.Mesh(
-            geometry,
-            material
-        );
-
-        picture.position.copy(data.position);
-        picture.position.z += 0.06;
-
-        scene.add(picture);
-
-    }, undefined, (error) => {
-
-        console.error(
-            'Failed to load exhibit image:',
-            error
-        );
-
-    });
-}
-
-createPictureExhibit(exhibit);
-
-
-// ================================
-// 12. EXHIBIT PROXIMITY
-// ================================
-
-const interactionPrompt =
-    document.getElementById('interaction-prompt');
-
-let activeExhibit = null;
-
-function updateInteraction() {
-
-    activeExhibit = null;
-    interactionPrompt.hidden = true;
-
-    if (!controls.isLocked || readingExhibit) {
-        return;
-    }
-
-    const distance = Math.hypot(
-        camera.position.x - exhibit.position.x,
-        camera.position.z - exhibit.position.z
-    );
-
-    if (distance <= exhibit.interactionDistance) {
-
-        activeExhibit = exhibit;
-
-        interactionPrompt.textContent =
-            exhibit.title + '\n[ E ] Read exhibit';
-
-        interactionPrompt.hidden = false;
-
-    }
-}
-
-
-// ================================
-// 13. EXHIBIT INFORMATION PANEL
-// ================================
-
-function openExhibit(data) {
-
-    readingExhibit = true;
-
-    clearKeys();
-
-    document.getElementById('exhibit-title')
-        .textContent = data.title;
-
-    document.getElementById('exhibit-meta')
-        .textContent = data.year + ' | ' + data.origin;
-
-    document.getElementById('exhibit-description')
-        .textContent = data.description;
-
-    document.getElementById('exhibit-image')
-        .src = data.image;
-
-    document.getElementById('exhibit-image')
-        .alt = data.title;
-
-    // Release the mouse and pause movement
-    controls.unlock();
-
-    menu.hidden = true;
-    hud.hidden = true;
-    exhibitPanel.hidden = false;
-}
-
-window.addEventListener('keydown', (event) => {
-
-    if (
-        event.code === 'KeyE'
-        && !event.repeat
-        && activeExhibit
-        && controls.isLocked
-        && !readingExhibit
-    ) {
-        openExhibit(activeExhibit);
-    }
-
-});
-
-
-const closeExhibitButton =
-    document.getElementById('close-exhibit');
-
-closeExhibitButton.addEventListener('click', () => {
-
-    readingExhibit = false;
-
-    exhibitPanel.hidden = true;
-
-    clearKeys();
-
-    // Show a fallback menu if mouse capture fails
+controls.addEventListener('unlock', () => {
+  clearKeys();
+  hud.hidden = true;
+  if (!readingExhibit) {
     menu.hidden = false;
     enterButton.textContent = 'Resume Exploring';
+  }
+});
+window.addEventListener('keydown', event => {
+  keys[event.code] = true;
+  // Jump only on fresh press, while playing, and only from the ground.
+  if (event.code === 'Space') {
+    event.preventDefault();
+    if (!event.repeat && controls.isLocked && !readingExhibit && grounded) {
+      verticalVelocity = JUMP_SPEED;
+      grounded = false;
+    }
+  }
+});
+window.addEventListener('keyup', event => { keys[event.code] = false; });
+window.addEventListener('blur', clearKeys);
 
-    controls.lock();
+function updateMovement(dt) {
+  if (!controls.isLocked || readingExhibit) return;
 
+  let forward = Number(!!keys.KeyW) - Number(!!keys.KeyS);
+  let sideways = Number(!!keys.KeyD) - Number(!!keys.KeyA);
+  const length = Math.hypot(forward, sideways);
+  if (length > 0) {
+    forward /= length;
+    sideways /= length;
+    const speed = (keys.ShiftLeft || keys.ShiftRight) ? RUN_SPEED : WALK_SPEED;
+    const start = camera.position.clone();
+    controls.moveForward(forward * speed * dt);
+    controls.moveRight(sideways * speed * dt);
+    const target = camera.position.clone();
+
+    // Resolve X and Z individually for sliding collisions with walls/pedestals.
+    camera.position.copy(start);
+    if (world.canStand(target.x, start.z, PLAYER_RADIUS)) camera.position.x = target.x;
+    if (world.canStand(camera.position.x, target.z, PLAYER_RADIUS)) camera.position.z = target.z;
+  }
+
+  // Gravity still runs while standing still (the old early-return blocked it).
+  if (!grounded) {
+    verticalVelocity -= GRAVITY * dt;
+    camera.position.y += verticalVelocity * dt;
+    if (camera.position.y <= PLAYER_HEIGHT) {
+      camera.position.y = PLAYER_HEIGHT;
+      verticalVelocity = 0;
+      grounded = true;
+    }
+  } else {
+    camera.position.y = PLAYER_HEIGHT;
+  }
+}
+
+function updateInteraction() {
+  activeExhibit = null;
+  interactionPrompt.hidden = true;
+  if (!controls.isLocked || readingExhibit) return;
+  let nearest = Infinity;
+  for (const item of exhibits) {
+    const [x, , z] = item.position;
+    const d = Math.hypot(camera.position.x - x, camera.position.z - z);
+    if (d <= (item.interactionDistance ?? 2.7) && d < nearest) {
+      nearest = d;
+      activeExhibit = item;
+    }
+  }
+  if (activeExhibit) {
+    interactionPrompt.textContent = `${activeExhibit.title}\n[ E ] Read exhibit`;
+    interactionPrompt.hidden = false;
+  }
+}
+
+function openExhibit(item) {
+  readingExhibit = true;
+  clearKeys();
+  document.getElementById('exhibit-title').textContent = item.title;
+  document.getElementById('exhibit-meta').textContent =
+    `${item.year || ''} | ${item.origin || ''}`;
+  document.getElementById('exhibit-description').textContent = item.description || '';
+  const image = document.getElementById('exhibit-image');
+  image.hidden = !item.image;
+  if (item.image) {
+    image.src = import.meta.env.BASE_URL + item.image;
+    image.alt = item.title;
+  } else {
+    image.removeAttribute('src');
+  }
+  controls.unlock();
+  menu.hidden = true;
+  hud.hidden = true;
+  exhibitPanel.hidden = false;
+}
+
+window.addEventListener('keydown', event => {
+  if (event.code === 'KeyE' && !event.repeat && activeExhibit &&
+      controls.isLocked && !readingExhibit) openExhibit(activeExhibit);
+});
+document.getElementById('close-exhibit').addEventListener('click', () => {
+  readingExhibit = false;
+  exhibitPanel.hidden = true;
+  clearKeys();
+  controls.lock();
 });
 
-// ================================
-// 9. RESIZE HANDLING
-// ================================
-
 window.addEventListener('resize', () => {
-    camera.aspect =
-        window.innerWidth / window.innerHeight;
-
-    camera.updateProjectionMatrix();
-
-    renderer.setSize(
-        window.innerWidth,
-        window.innerHeight
-    );
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+let previousTime = performance.now();
+renderer.setAnimationLoop(() => {
+  const now = performance.now();
+  const dt = Math.min((now - previousTime) / 1000, 0.05);
+  previousTime = now;
+  updateMovement(dt);
+  updateInteraction();
+  updateModels(dt);
+  renderer.render(scene, camera);
 });
