@@ -154,3 +154,44 @@ button:hover {
     color: #718377;
     font-size: 14px;
 }
+
+
+#performance-monitor {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+
+  background: rgba(15, 23, 42, 0.93);
+  color: #e5e7eb;
+  padding: 16px 20px;
+  border: 1px solid #475569;
+  border-radius: 10px;
+
+  font: 13px/1.8 monospace;
+  min-width: 195px;
+  pointer-events: none;
+}
+
+.perf-title {
+  font-weight: bold;
+  font-size: 15px;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+#performance-monitor hr {
+  border: none;
+  border-top: 1px solid #475569;
+  margin: 8px 0;
+}
+
+#performance-monitor small {
+  display: block;
+  color: #94a3b8;
+  margin-top: 10px;
+}
+
+#performance-monitor.perf-hidden {
+  display: none;
+}

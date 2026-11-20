@@ -4,6 +4,7 @@ import { buildWorld, SPAWN_POINTS } from './world.js';
 import { loadExhibits } from './exhibits.js';
 import { updateModels } from './modelLoader.js';
 import './style.css';
+import { createPerformanceMonitor } from "./performance.js";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xe8ebe5);
@@ -20,6 +21,7 @@ scene.add(new THREE.HemisphereLight(0xffffff, 0x888888, 2));
 const sun = new THREE.DirectionalLight(0xffffff, 1.5);
 sun.position.set(3, 8, 5);
 scene.add(sun);
+const perfMonitor = createPerformanceMonitor(renderer);
 
 const world = buildWorld(scene);
 let exhibits = [];
@@ -179,4 +181,5 @@ renderer.setAnimationLoop(() => {
   updateInteraction();
   updateModels(dt);
   renderer.render(scene, camera);
+  perfMonitor.update();
 });
