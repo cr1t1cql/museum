@@ -1,0 +1,65 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Museum of the Future</title>
+</head>
+
+<body>
+
+    <!-- Container for Three.js rendering -->
+    <div id="scene-container"></div>
+
+    <!-- Welcome and pause menu -->
+    <div id="menu" class="overlay">
+        <div class="menu-content">
+            <p class="eyebrow">THE CLIMATE HOPE PROJECT</p>
+
+            <h1>Museum of the Future</h1>
+
+            <p>
+                Explore a future shaped by human ingenuity,
+                collective action, and environmental restoration.
+            </p>
+
+            <button id="enter-button">Enter the Museum</button>
+
+            <div class="instructions">
+                WASD to move<br>
+                Mouse to look around<br>
+                E to interact<br>
+                Esc to pause
+            </div>
+        </div>
+    </div>
+
+    <!-- First-person interface -->
+    <div id="hud" hidden>
+        <div id="crosshair">+</div>
+        <div id="interaction-prompt" hidden></div>
+        <div id="controls-hint">WASD · Move | ESC · Pause</div>
+    </div>
+
+    <!-- Exhibit information interface -->
+    <div id="exhibit-panel" class="overlay" hidden>
+        <article class="exhibit-content">
+            <p class="eyebrow">MUSEUM COLLECTION</p>
+
+            <h2 id="exhibit-title"></h2>
+            <p id="exhibit-meta"></p>
+
+            <img id="exhibit-image" alt="Museum exhibit" />
+
+            <p id="exhibit-description"></p>
+
+            <button id="close-exhibit">Continue Exploring</button>
+        </article>
+    </div>
+
+    <!-- Load the JavaScript application -->
+    <script type="module" src="/src/main.js"></script>
+
+</body>
+</html>
