@@ -1,18 +1,19 @@
 import * as THREE from 'three';
 
-// All positions are in meters. +Y is up, and the floor surface is Y=0.
+// coords in meters, +Y upwards
 export const SPAWN_POINTS = {
-  // waiting: new THREE.Vector3(-20, 1.65, 26.5),
-  waiting: new THREE.Vector3(0, 1.65, 0),
+  waiting: new THREE.Vector3(-20, 1.65, 26.5),
   foyer: new THREE.Vector3(0, 1.65, 0),
 };
-const WALL_T = 0.2;
-const WALL_COLOR = 0xf0efe8;
-const FLOOR_COLOR = 0xbac4b9;
-const CEILING_COLOR = 0xe9ece7;
 
-// Local door offsets: for north/south, 'at' is relative X;
-// for east/west, 'at' is relative Z.
+const WALL_T = 0.2;
+const WALL_COLOR = 0xf5f1e8;    // Warm ivory
+const FLOOR_COLOR = 0xd8c7ae;   // Natural sand
+const CEILING_COLOR = 0xfffcf5; // Soft white
+const FOYER_FLOOR = 0xd6dfd1;  // Pale sage
+const SIGN_COLOR = 0x718e76;   // Better green
+const SIGN_TEXT = '#fff9eb';   // Cream
+
 const ROOMS = [
   {
     id: 'foyer', x: 0, z: 0, w: 20, d: 20, h: 5.2,
@@ -33,15 +34,10 @@ const ROOMS = [
   },
 ];
 
-// An L-shaped entrance corridor connects the waiting room to the SW
-// side of the foyer, leaving all four cardinal exhibit wings unobstructed.
-// Three NONOVERLAPPING tiles form the L-shaped floor/ceiling.
-// The previous two rectangles overlapped, causing coplanar z-fighting
-// (flickering / see-through-looking surfaces at the corridor turn).
 const CORRIDORS = [
-  { x: -15, z: 7.5, w: 10, d: 3 },       // horizontal: X [-20,-10], Z [6,9]
-  { x: -20.75, z: 8.25, w: 1.5, d: 1.5 }, // corner: X [-21.5,-20], Z [7.5,9]
-  { x: -20, z: 12, w: 3, d: 6 },        // vertical: X [-21.5,-18.5], Z [9,15]
+  { x: -15, z: 7.5, w: 10, d: 3 },       
+  { x: -20.75, z: 8.25, w: 1.5, d: 1.5 }, 
+  { x: -20, z: 12, w: 3, d: 6 },       
 ];
 
 export function buildWorld(scene) {
@@ -49,6 +45,7 @@ export function buildWorld(scene) {
   const obstacles = [];
   const footprints = [...ROOMS, ...CORRIDORS];
 
+  scene.background = new THREE.Color(0xf5f1e8);
   function box(w, h, d, color, x, y, z, isWall = false) {
     const mesh = new THREE.Mesh(
       new THREE.BoxGeometry(w, h, d),
@@ -98,7 +95,7 @@ export function buildWorld(scene) {
 
   for (const room of ROOMS) {
     box(room.w, 0.2, room.d,
-        room.id === 'foyer' ? 0xcbd2ca : FLOOR_COLOR,
+        room.id === 'foyer' ? FOYER_FLOOR : FLOOR_COLOR,
         room.x, -0.1, room.z);
     box(room.w, 0.2, room.d, CEILING_COLOR,
         room.x, room.h + 0.1, room.z);
@@ -112,15 +109,14 @@ export function buildWorld(scene) {
   }
 
   // The corridor is an L shape, so its perimeter is defined explicitly.
-  // These walls leave a continuous opening around the bend and at both ends.
   box(10, 4.2, WALL_T, WALL_COLOR, -15, 2.1, 6, true);       // top of horizontal leg
   box(8.5, 4.2, WALL_T, WALL_COLOR, -14.25, 2.1, 9, true);    // bottom, right of bend
   box(WALL_T, 4.2, 1.5, WALL_COLOR, -20, 2.1, 6.75, true);   // west of horizontal leg
-  box(1.5, 4.2, WALL_T, WALL_COLOR, -20.75, 2.1, 7.5, true); // FIX: missing short wall at L-corner
+  box(1.5, 4.2, WALL_T, WALL_COLOR, -20.75, 2.1, 7.5, true); // short wall at L-corner
   box(WALL_T, 4.2, 7.5, WALL_COLOR, -21.5, 2.1, 11.25, true);// west of vertical leg
   box(WALL_T, 4.2, 6, WALL_COLOR, -18.5, 2.1, 12, true);    // east of vertical leg
 
-  // A subtle mark in the foyer makes the four-way junction obvious.
+  // look around
   const compass = new THREE.Mesh(
     new THREE.RingGeometry(1.9, 2.05, 64),
     new THREE.MeshBasicMaterial({ color: 0x537b69, side: THREE.DoubleSide }),
@@ -129,31 +125,70 @@ export function buildWorld(scene) {
   compass.position.y = 0.012;
   scene.add(compass);
 
+
   function sign(title, subtitle, x, y, z, width, height, facingY = 0) {
+    // match texture resolution to sign aspect ratio
+    const pixelsPerMeter = 512;
+
     const canvas = document.createElement('canvas');
-    canvas.width = 2048;
-    canvas.height = 512;
+    canvas.width = Math.round(width * pixelsPerMeter);
+    canvas.height = Math.round(height * pixelsPerMeter);
+
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#244638';
-    ctx.fillRect(0, 0, 2048, 512);
-    ctx.fillStyle = '#f4f0e4';
+
+    // Background
+    ctx.fillStyle = '#718e76';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = SIGN_TEXT;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = `bold ${title.length > 23 ? 102 : 128}px Arial`;
-    ctx.fillText(title, 1024, subtitle ? 195 : 255, 1920);
+
+    const lines = title.split('\n');
+
     if (subtitle) {
-      ctx.font = '60px Arial';
-      ctx.fillText(subtitle, 1024, 350, 1920);
+      lines.push(subtitle);
     }
+
+    const lineHeight = canvas.height / (lines.length + 0.5);
+
+    lines.forEach((line, index) => {
+      const isSubtitle = subtitle && index === lines.length - 1;
+
+      let fontSize = lineHeight * (isSubtitle ? 0.45 : 0.7);
+
+      ctx.font = `${isSubtitle ? 'normal' : 'bold'} ${fontSize}px Arial`;
+
+      // shrink text to fit
+      const measuredWidth = ctx.measureText(line).width;
+
+      if (measuredWidth > canvas.width * 0.88) {
+        fontSize *= (canvas.width * 0.88) / measuredWidth;
+      }
+
+      ctx.font = `${isSubtitle ? 'normal' : 'bold'} ${fontSize}px Arial`;
+
+      const textY =
+        canvas.height / 2 +
+        (index - (lines.length - 1) / 2) * lineHeight;
+
+      ctx.fillText(line, canvas.width / 2, textY);
+    });
+
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
-    // A thin solid backing, opaque on both sides
+
+    // filtering magic
+    texture.anisotropy = 8;
+    texture.minFilter = THREE.LinearMipmapLinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+
+    // opaque backing to prevent mirrored text on signs
     const backing = new THREE.Mesh(
       new THREE.BoxGeometry(width, height, 0.06),
-      new THREE.MeshBasicMaterial({ color: 0x244638 })
+      new THREE.MeshBasicMaterial({ color: SIGN_COLOR })
     );
 
-    // Text visible only on the front
     const front = new THREE.Mesh(
       new THREE.PlaneGeometry(width, height),
       new THREE.MeshBasicMaterial({
@@ -162,29 +197,62 @@ export function buildWorld(scene) {
       })
     );
 
-    // Place front slightly ahead of backing
     front.position.z = 0.04;
 
-    // Group both together
-    const signGroup = new THREE.Group();
-    signGroup.add(backing);
-    signGroup.add(front);
+    const group = new THREE.Group();
+    group.add(backing, front);
 
-    signGroup.position.set(x, y, z);
-    signGroup.rotation.y = facingY;
+    group.position.set(x, y, z);
+    group.rotation.y = facingY;
 
-    scene.add(signGroup);
+    scene.add(group);
   }
+  
+  // foyer title
+  sign(
+    'MUSEUM OF TOMORROW',
+    'A hopeful climate future, told through its artifacts',
+    -20, 3.0, 15.3,
+    8.5, 1.7
+  );
 
-  // Waiting-room title and four wing labels; camera default spawn is set in main.js.
-  sign('MUSEUM OF TOMORROW', 'A hopeful climate future, told through its artifacts',
-       -20, 3.0, 15.3, 8.5, 1.7);
-  sign('RESILIENCE', '', 0, 3.45, -11.4, 6.7, 0.8);
-  sign('CLEANUP', '', 0, 3.45, 11.4, 6.7, 0.8, Math.PI);
-  sign('ENERGY', '', 11.4, 3.45, 0, 6.7, 0.8, -Math.PI / 2);
-  sign('MOBILITY', '', -11.4, 3.45, 0, 6.7, 0.8, Math.PI / 2);
+  // NORTH: Innovation & Technology
+  sign(
+    'INNOVATION &\nTECHNOLOGY',
+    '',
+    0, 3.35, -11.4,
+    7.5, 1.2
+  );
 
-  // Add static obstacles (pedestals, later benches, etc.) without rewriting movement.
+  // SOUTH: Art & Culture
+  sign(
+    'ART & CULTURE',
+    '',
+    0, 3.35, 11.4,
+    7.5, 1.2,
+    Math.PI
+  );
+
+  // EAST: Policy & Infrastructure
+  sign(
+    'POLICY &\nINFRASTRUCTURE',
+    '',
+    11.4, 3.35, 0,
+    7.5, 1.2,
+    -Math.PI / 2
+  );
+
+  // WEST: Collective Action & Activism
+  sign(
+    'COLLECTIVE ACTION\n& ACTIVISM',
+    '',
+    -11.4, 3.35, 0,
+    7.5, 1.2,
+    Math.PI / 2
+  );
+
+
+  // add static obstacles with collision
   function addObstacle(x, z, width, depth) {
     obstacles.push({ minX: x - width / 2, maxX: x + width / 2,
                      minZ: z - depth / 2, maxZ: z + depth / 2 });
@@ -204,8 +272,6 @@ export function buildWorld(scene) {
   }
 
   function canStand(x, z, radius = 0.3) {
-    // Test the visitor's circular footprint against the UNION of room floors,
-    // rather than shrinking each room separately (which would block doors).
     if (!inFootprint(x, z)) return false;
     for (let i = 0; i < 16; i++) {
       const angle = i * Math.PI / 8;

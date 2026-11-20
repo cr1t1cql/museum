@@ -5,6 +5,12 @@ const gltfLoader = new GLTFLoader();
 
 const rotatingModels = [];
 
+export function registerRotation(holder, speed = 0.28) {
+  if (speed !== 0) {
+    rotatingModels.push({ holder, speed });
+  }
+}
+
 export function updateModels(dt) {
   for (const { holder, speed } of rotatingModels) {
     holder.rotation.y += speed * dt;
@@ -13,7 +19,6 @@ export function updateModels(dt) {
 
 /** Load one model and fit its longest axis to targetSize meters.
  *  position = [x, bottomY, z], where bottomY is the pedestal's top.
- *  Keep assetPath relative to public/ (e.g. 'models/drone.glb').
  */
 export async function loadModel(scene, assetPath, position, targetSize = 2, rotationY = 0, spinSpeed = 0) {
   const url = import.meta.env.BASE_URL + assetPath;

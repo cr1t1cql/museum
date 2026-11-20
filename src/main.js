@@ -5,13 +5,10 @@ import { loadExhibits } from './exhibits.js';
 import { updateModels } from './modelLoader.js';
 import './style.css';
 
-// Scene and renderer stay here; geometry and exhibit assets live in modules.
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xe8ebe5);
 const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 120);
-// To debug from the foyer, open: ?spawn=foyer
-// Or change DEFAULT_SPAWN to 'foyer' to start there every time.
-const DEFAULT_SPAWN = 'waiting';
+const DEFAULT_SPAWN = 'foyer';
 const requestedSpawn = new URLSearchParams(window.location.search).get('spawn');
 const spawnName = Object.hasOwn(SPAWN_POINTS, requestedSpawn) ? requestedSpawn : DEFAULT_SPAWN;
 camera.position.copy(SPAWN_POINTS[spawnName]);
@@ -44,10 +41,10 @@ let readingExhibit = false;
 let activeExhibit = null;
 const WALK_SPEED = 2.5;
 const RUN_SPEED = 5.0;
-const PLAYER_HEIGHT = 1.65; // eye height in meters, with feet at Y = 0
+const PLAYER_HEIGHT = 1.65; 
 const PLAYER_RADIUS = 0.3;
-const JUMP_SPEED = 5.5;     // initial upwards velocity, meters/second
-const GRAVITY = 14;        // downward acceleration, meters/second squared
+const JUMP_SPEED = 6;     // upwards velocity
+const GRAVITY = 15;        // downward acceleration
 let verticalVelocity = 0;
 let grounded = true;
 
@@ -70,9 +67,8 @@ controls.addEventListener('unlock', () => {
 });
 window.addEventListener('keydown', event => {
   keys[event.code] = true;
-  // Jump only on fresh press, while playing, and only from the ground.
   if (event.code === 'Space') {
-    event.preventDefault();
+    event.preventDefault(); // no double jumping
     if (!event.repeat && controls.isLocked && !readingExhibit && grounded) {
       verticalVelocity = JUMP_SPEED;
       grounded = false;
@@ -103,8 +99,7 @@ function updateMovement(dt) {
     if (world.canStand(camera.position.x, target.z, PLAYER_RADIUS)) camera.position.z = target.z;
   }
 
-  // Gravity still runs while standing still (the old early-return blocked it).
-  if (!grounded) {
+  if (!grounded) { // lol, state space integration 
     verticalVelocity -= GRAVITY * dt;
     camera.position.y += verticalVelocity * dt;
     if (camera.position.y <= PLAYER_HEIGHT) {
@@ -161,6 +156,7 @@ window.addEventListener('keydown', event => {
   if (event.code === 'KeyE' && !event.repeat && activeExhibit &&
       controls.isLocked && !readingExhibit) openExhibit(activeExhibit);
 });
+
 document.getElementById('close-exhibit').addEventListener('click', () => {
   readingExhibit = false;
   exhibitPanel.hidden = true;
@@ -173,6 +169,7 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
 });
+
 let previousTime = performance.now();
 renderer.setAnimationLoop(() => {
   const now = performance.now();

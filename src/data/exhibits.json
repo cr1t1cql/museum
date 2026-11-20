@@ -1,32 +1,159 @@
 [
   {
-    "id": "drone",
-    "type": "model",
-    "wing": "north",
-    "title": "A Drone for a Restored World",
-    "year": "2050 (imagined)",
-    "origin": "Future climate restoration programs",
-    "description": "A sample 3D exhibit. Replace this paragraph with the story of your actual artifact.",
-    "model": "models/drone.glb",
-    "position": [0, 0, -20],
-    "targetSize": 1.9,
-    "pedestalWidth": 2.1,
-    "pedestalDepth": 2.1,
-    "interactionDistance": 2.7,
-    "spinSpeed" : 0.3
-  },
-  {
     "id": "original-picture",
     "type": "image",
     "wing": "west",
-    "title": "A Greener Future",
+    "title": "hexapjack",
     "year": "2050 (imagined)",
-    "origin": "Museum of Tomorrow",
-    "description": "The first picture exhibit from the original museum prototype, moved into the west wing.",
-    "image": "images/artifact.jpg",
+    "origin": "lol",
+    "description": "cant stop the jack",
+    "image": "images/artifact.png",
     "position": [-22, 1.8, -4.82],
     "width": 2.4,
     "height": 1.6,
     "interactionDistance": 2.5
+  },
+  {
+    "id": "treaty-timeline",
+    "title": "Treaty Timeline: A Century of Climate Cooperation",
+    "year": "2000–2100",
+    "origin": "International Climate Cooperation Archive",
+    "description": "This timeline documents the international treaties, agreements, amendments, and climate-related legislation established between 2000 and 2100. It highlights major milestones in global climate cooperation, showing how countries worked together to reduce greenhouse gas emissions, protect ecosystems, advance renewable energy, and promote environmental justice. Visitors can explore key agreements throughout the century and see how international commitments helped shape the world's response to the climate crisis.",
+    "wing": "policy",
+    "position": [
+      19,
+      2.2,
+      -4.82
+    ],
+    "type": "image",
+    "interactionDistance": 3.5,
+    "image": "images/timeline.png",
+    "width": 15,
+    "height": 3.8,
+    "rotationY": 0
+  },
+  {
+    "id": "cook-islands-treaty",
+    "title": "Cook Islands Climate and Indigenous Heritage Treaty",
+    "year": 2063,
+    "origin": "Rarotonga, Cook Islands",
+    "description": "This treaty was signed in 2063 in Rarotonga, Cook Islands by leaders from New Zealand, Australia, and the Cook Islands with the goal of securing protections for the Indigenous land and cultural heritage while addressing concerns regarding climate related disasters. The treaty includes regulations, financial support, and other guidelines for managing environmental guidelines under Indigenous leadership.",
+    "wing": "policy",
+    "position": [
+      27,
+      2.2,
+      4.82
+    ],
+    "type": "image",
+    "interactionDistance": 3.5,
+    "image": "images/treaty.png",
+    "width": 4.0,
+    "height": 3.0,
+    "rotationY": 3.141592653589793
+  },
+  {
+    "id": "cook-islands-protest",
+    "title": "Cook Islands Climate Protest",
+    "year": 2062,
+    "origin": "Rarotonga, Cook Islands",
+    "description": "This protest sign was used during the 2062 climate demonstrations in Rarotonga, Cook Islands, where families, youth activists, community elders, and local leaders gathered to protest the growing environmental destruction caused by climate change. Protesters demanded stronger protections for their ancestral lands, marine ecosystems, and cultural heritage, while calling for the restoration of Indigenous sovereignty and decision-making authority over their land and natural resources. The movement helped pave the way for the Cook Islands Climate and Indigenous Heritage Treaty of 2063.",
+    "wing": "collective-action",
+    "position": [
+      -18,
+      2.2,
+      -4.82
+    ],
+    "type": "image",
+    "interactionDistance": 3.5,
+    "image": "images/sign.png",
+    "width": 4.0,
+    "height": 2.7,
+    "rotationY": 0
+  },
+  {
+    "id": "cooling-san-diego",
+    "title": "Cooling San Diego: Urban Heat Solutions for a Sustainable Future",
+    "year": 2024,
+    "origin": "University of California, San Diego",
+    "description": "Students in the Synthesis Program at the University of California, San Diego collaborated to develop innovative solutions to the urban heat island effect in San Diego County. Through research and teamwork, they designed a project focused on implementing green roofs to reduce urban temperatures and promote environmental sustainability. Their work demonstrated how student-led initiatives could address local climate challenges and inspire future environmental action that help lead our world to a more sustainable future.",
+    "wing": "collective-action",
+    "position": [
+      -27,
+      2.2,
+      4.82
+    ],
+    "type": "image",
+    "interactionDistance": 3.5,
+    "image": "images/cooling.png",
+    "width": 4.5,
+    "height": 2.7,
+    "rotationY": 3.141592653589793
+  },
+  {
+    "id": "co2-filter",
+    "title": "Passive CO2 Atmospheric Filter, and the First CO2 Eating Microbes",
+    "year": 2047,
+    "origin": "Nairobi, Kenya",
+    "description": "The first commercially successful atmospheric carbon removal system to combine passive air filtration with genetically engineered microorganisms capable of converting captured CO₂ into stable carbon compounds. These autonomous systems could operate in even the most remote environments, due to their small power draw and maintenance requirements. Their widespread deployment marked a turning point in humanity's efforts to reverse centuries of accumulated atmospheric carbon emissions.\n\nThis technology originated from a landmark scientific collaboration between African nations, whose joint exploration of previously uncharted subterranean cave networks led to the discovery of an extraordinary microbial ecosystem. Isolated within deep, carbon-rich caverns for millions of years, these microorganisms had evolved a unique metabolic process capable of converting atmospheric CO₂ into stable organic compounds. Through decades of genetic engineering, researchers transformed this natural adaptation into the foundation of modern atmospheric restoration technology.\n\nThe decommissioned purification cylinder displayed here houses one of the earliest engineered colonies of these CO₂-digesting microorganisms, achieving a carbon conversion efficiency of 56.3%. Contemporary descendants of these devices now achieve capture efficiencies of up to 99.996%, converting atmospheric carbon directly into nutrient-rich compounds that sustain their host colonies. This closed-loop biological process has eliminated the need for separate carbon storage devices.",
+    "wing": "innovation",
+    "position": [
+      -2.55,
+      0,
+      -19.5
+    ],
+    "type": "model",
+    "spinSpeed": 0.28,
+    "interactionDistance": 3.0,
+    "models": [
+      "models/filter.glb",
+      "models/filter_cut.glb"
+    ],
+    "targetSize": 1.6,
+    "pedestalWidth": 4.0,
+    "pedestalDepth": 1.8
+  },
+  {
+    "id": "cloud-seeding-drone",
+    "title": "Cloud Seeding Drones, and the First Cloud in the Sahara",
+    "year": 2052,
+    "origin": "Nouakchott, Mauritania",
+    "description": "The first commercially viable autonomous atmospheric water-harvesting and cloud-seeding system, developed to address the worsening water scarcity experienced across the Sahel and Sahara during the early 21st century. Combining advanced moisture-absorbing materials, high-altitude atmospheric monitoring, and coordinated fleets of cloud-seeding drones, the system marked a turning point in humanity's ability to manage freshwater availability in some of the world's most arid environments.\n\nThe craft displayed here is one of the original cloud-seeding drones deployed during the 2052 Nouakchott trials. Its lightweight composite housing contains an early-generation atmospheric sensor array, autonomous navigation system, and precision dispersal mechanism. These components enabled the drone to monitor local weather conditions and deliver targeted interventions with minimal human oversight.\n\nSubsequent generations incorporated improved moisture-capture materials, renewable-powered desalination, closed-loop water recycling, and regional atmospheric forecasting networks. By the late 21st century, these interconnected systems had become an essential component of water infrastructure across previously water-stressed settlements, reducing dependence on vulnerable underground aquifers.",
+    "wing": "innovation",
+    "position": [
+      2.55,
+      0,
+      -19.5
+    ],
+    "type": "model",
+    "spinSpeed": 0.28,
+    "interactionDistance": 3.0,
+    "models": [
+      "models/drone.glb"
+    ],
+    "targetSize": 1.9,
+    "pedestalWidth": 2.1,
+    "pedestalDepth": 2.1
+  },
+  {
+    "id": "arctic-anchor",
+    "title": "Arctic Shelf Stabilization Anchor",
+    "year": 2094,
+    "origin": "Pacific Island Coalition, deployed in Antarctica",
+    "description": "This autonomous underwater anchor was recovered from the first successful ice-sheet stabilization network. It is constructed from corrosion-resistant composite alloys, and houses an autonomous control unit, seabed attachment mechanisms, and an array of hydraulic actuators. These technologies combined to position and maintain a network submerged barriers and supports, to halt the deterioration of the Antarctic coast. Its operation was supported by renewable-powered infrastructure and long-duration energy storage systems, allowing it to function for extended periods with minimal human intervention.\n\nDeveloped through decades of international research led by Pacific Island states facing existential threats from rising seas, the system slowed the retreat of vulnerable Antarctic glaciers by reducing the flow of relatively warm ocean water toward their grounding zones. Powered by renewable energy, robotic subsea structures redirected selected ocean currents and monitored ice movement in real time. Combined with aggressive global emissions reductions and atmospheric carbon removal, these systems helped humanity slow long-term sea-level rise.",
+    "wing": "innovation",
+    "position": [
+      0,
+      0,
+      -29
+    ],
+    "type": "model",
+    "spinSpeed": 0.28,
+    "interactionDistance": 3.0,
+    "models": [
+      "models/anchor.glb"
+    ],
+    "targetSize": 1.9,
+    "pedestalWidth": 2.1,
+    "pedestalDepth": 2.1
   }
 ]
