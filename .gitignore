@@ -28,4 +28,4 @@ dist/
 .env.local
 public/favicon.svg
 icons.svg
-src/assets
+/src/assets
