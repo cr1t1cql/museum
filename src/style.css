@@ -141,6 +141,11 @@ button:hover {
 .exhibit-content {
     max-height: 85vh;
     overflow-y: auto;
+    white-space: normal;
+}
+
+.exhibit-content h2 {
+    margin: 0 0 6px 0;
 }
 
 #exhibit-image {
@@ -153,8 +158,14 @@ button:hover {
 #exhibit-meta {
     color: #718377;
     font-size: 14px;
+    margin: 0 0 12px 0;
 }
 
+#exhibit-description {
+    white-space: pre-line;
+    line-height: 1.6;
+    margin: 0 0 24px 0;
+}
 
 #performance-monitor {
   position: fixed;

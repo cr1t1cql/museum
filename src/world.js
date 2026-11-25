@@ -3,7 +3,7 @@ import * as THREE from 'three';
 // coords in meters, +Y upwards
 export const SPAWN_POINTS = {
   waiting: new THREE.Vector3(-20, 1.65, 26.5),
-  foyer: new THREE.Vector3(0, 1.65, 0),
+  foyer: new THREE.Vector3(8, 1.65, 0),
 };
 
 const WALL_T = 0.2;
@@ -16,28 +16,24 @@ const SIGN_TEXT = '#fff9eb';   // Cream
 
 const ROOMS = [
   {
-    id: 'foyer', x: 0, z: 0, w: 20, d: 20, h: 5.2,
+    id: 'foyer', x: 0, z: 0, w: 20, d: 20, h: 4.2,
     openings: {
       north: [{ at: 0, width: 8 }],
       south: [{ at: 0, width: 8 }],
       east:  [{ at: 0, width: 8 }],
-      west:  [{ at: 0, width: 8 }, { at: 7.5, width: 3 }],
+      west:  [{ at: 0, width: 8 }],
     },
   },
-  { id: 'north', x: 0, z: -22, w: 10, d: 24, h: 4.2, skip: ['south'] },
-  { id: 'south', x: 0, z: 22, w: 10, d: 24, h: 4.2, skip: ['north'] },
-  { id: 'east', x: 22, z: 0, w: 24, d: 10, h: 4.2, skip: ['west'] },
-  { id: 'west', x: -22, z: 0, w: 24, d: 10, h: 4.2, skip: ['east'] },
-  {
-    id: 'waiting', x: -20, z: 22, w: 12, d: 14, h: 4.2,
-    openings: { north: [{ at: 0, width: 3 }] },
-  },
+  { id: 'north', x: 0, z: -19, w: 10, d: 18, h: 4.2, skip: ['south'] },
+  { id: 'south', x: 0, z: 19, w: 10, d: 18, h: 4.2, skip: ['north'] },
+  { id: 'east', x: 19, z: 0, w: 18, d: 10, h: 4.2, skip: ['west'] },
+  { id: 'west', x: -19, z: 0, w: 18, d: 10, h: 4.2, skip: ['east'] },
 ];
 
 const CORRIDORS = [
-  { x: -15, z: 7.5, w: 10, d: 3 },       
-  { x: -20.75, z: 8.25, w: 1.5, d: 1.5 }, 
-  { x: -20, z: 12, w: 3, d: 6 },       
+//  { x: -15, z: 7.5, w: 10, d: 3 },       
+//  { x: -20.75, z: 8.25, w: 1.5, d: 1.5 }, 
+//  { x: -20, z: 12, w: 3, d: 6 },       multiline comment FTW
 ];
 
 export function buildWorld(scene) {
@@ -49,7 +45,9 @@ export function buildWorld(scene) {
   function box(w, h, d, color, x, y, z, isWall = false) {
     const mesh = new THREE.Mesh(
       new THREE.BoxGeometry(w, h, d),
-      new THREE.MeshStandardMaterial({ color, roughness: 0.9 }),
+      color === CEILING_COLOR
+      ? new THREE.MeshBasicMaterial({ color: 0xeae7df })
+      : new THREE.MeshStandardMaterial({ color, roughness: 0.9 }),
     );
     mesh.position.set(x, y, z);
     scene.add(mesh);
@@ -108,14 +106,6 @@ export function buildWorld(scene) {
     box(c.w, 0.2, c.d, CEILING_COLOR, c.x, 4.3, c.z);
   }
 
-  // The corridor is an L shape, so its perimeter is defined explicitly.
-  box(10, 4.2, WALL_T, WALL_COLOR, -15, 2.1, 6, true);       // top of horizontal leg
-  box(8.5, 4.2, WALL_T, WALL_COLOR, -14.25, 2.1, 9, true);    // bottom, right of bend
-  box(WALL_T, 4.2, 1.5, WALL_COLOR, -20, 2.1, 6.75, true);   // west of horizontal leg
-  box(1.5, 4.2, WALL_T, WALL_COLOR, -20.75, 2.1, 7.5, true); // short wall at L-corner
-  box(WALL_T, 4.2, 7.5, WALL_COLOR, -21.5, 2.1, 11.25, true);// west of vertical leg
-  box(WALL_T, 4.2, 6, WALL_COLOR, -18.5, 2.1, 12, true);    // east of vertical leg
-
   // look around
   const compass = new THREE.Mesh(
     new THREE.RingGeometry(1.9, 2.05, 64),
@@ -124,7 +114,6 @@ export function buildWorld(scene) {
   compass.rotation.x = -Math.PI / 2;
   compass.position.y = 0.012;
   scene.add(compass);
-
 
   function sign(title, subtitle, x, y, z, width, height, facingY = 0) {
     // match texture resolution to sign aspect ratio
@@ -207,50 +196,207 @@ export function buildWorld(scene) {
 
     scene.add(group);
   }
-  
-  // foyer title
+
+  // NORTH — Innovation & Technology
   sign(
-    'MUSEUM OF TOMORROW',
-    'A hopeful climate future, told through its artifacts',
-    -20, 3.0, 15.3,
-    8.5, 1.7
+    'INNOVATION & TECHNOLOGY', '',
+    0, 3.7, -10,
+    8.0, 1.0,
+    0
   );
 
-  // NORTH: Innovation & Technology
+  // SOUTH — Art & Culture
   sign(
-    'INNOVATION &\nTECHNOLOGY',
-    '',
-    0, 3.35, -11.4,
-    7.5, 1.2
-  );
-
-  // SOUTH: Art & Culture
-  sign(
-    'ART & CULTURE',
-    '',
-    0, 3.35, 11.4,
-    7.5, 1.2,
+    'ART & CULTURE', '',
+    0, 3.7, 10,
+    8.0, 1.0,
     Math.PI
   );
 
-  // EAST: Policy & Infrastructure
+  // EAST — Policy & Infrastructure
   sign(
-    'POLICY &\nINFRASTRUCTURE',
-    '',
-    11.4, 3.35, 0,
-    7.5, 1.2,
+    'POLICY & INFRASTRUCTURE', '',
+    10, 3.7, 0,
+    8.0, 1.0,
     -Math.PI / 2
   );
 
-  // WEST: Collective Action & Activism
+  // WEST — Collective Action & Activism
   sign(
-    'COLLECTIVE ACTION\n& ACTIVISM',
-    '',
-    -11.4, 3.35, 0,
-    7.5, 1.2,
+    'COLLECTIVE ACTION & ACTIVISM', '',
+    -10, 3.7, 0,
+    8.0, 1.0,
     Math.PI / 2
   );
 
+  function wallText(
+    title, subtitle,
+    x, y, z,
+    width, height,
+    facingY = 0
+  ) {
+    const pixelsPerMeter = 512;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(width * pixelsPerMeter);
+    canvas.height = Math.round(height * pixelsPerMeter);
+
+    const ctx = canvas.getContext('2d');
+
+    const W = canvas.width;
+    const H = canvas.height;
+
+    // Transparent background
+    ctx.clearRect(0, 0, W, H);
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    function drawText(text, y, size, weight, color) {
+      ctx.font = `${weight} ${size}px Arial`;
+
+      const measuredWidth = ctx.measureText(text).width;
+
+      if (measuredWidth > W * 0.9) {
+        size *= W * 0.9 / measuredWidth;
+      }
+
+      ctx.font = `${weight} ${size}px Arial`;
+      ctx.fillStyle = color;
+      ctx.fillText(text, W / 2, y);
+    }
+
+    // Main heading
+    const titleLines = title.split('\n');
+
+    titleLines.forEach((line, i) => {
+      drawText(
+        line,
+        H * 0.30 +
+          (i - (titleLines.length - 1) / 2) * H * 0.17,
+        H * 0.16,
+        'bold',
+        '#426354'
+      );
+    });
+
+    // Decorative horizontal divider
+    ctx.strokeStyle = '#718e76';
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+    ctx.moveTo(W * 0.25, H * 0.53);
+    ctx.lineTo(W * 0.75, H * 0.53);
+    ctx.stroke();
+
+    // Smaller supporting text
+    const subtitleLines = subtitle.split('\n');
+
+    subtitleLines.forEach((line, i) => {
+      drawText(
+        line,
+        H * 0.68 + i * H * 0.10,
+        H * 0.085,
+        'normal',
+        '#52675b'
+      );
+    });
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 8;
+
+    const mesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(width, height),
+      new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        depthWrite: false,
+        side: THREE.FrontSide
+      })
+    );
+
+    mesh.position.set(x, y, z);
+    mesh.rotation.y = facingY;
+
+    scene.add(mesh);
+
+    return mesh;
+  }
+  // NORTH WALL
+
+  wallText(
+    'IMAGINATION\nINTO ACTION',
+    'Today’s ideas become\ntomorrow’s solutions.',
+    -7, 2.4, -9.88,
+    5.0, 2.8,
+    0
+  );
+
+  wallText(
+    'A BETTER WORLD\nBY DESIGN',
+    'Innovation in service\nof our planet.',
+    7, 2.4, -9.88,
+    5.0, 2.8,
+    0
+  );
+
+  // EAST WALL
+
+  wallText(
+    'CHANGE IS\nCOLLECTIVE',
+    'The decisions we make\nshape generations.',
+    9.88, 2.4, -7,
+    5.0, 2.8,
+    -Math.PI / 2
+  );
+
+  wallText(
+    'HOPE IS\nSOMETHING WE BUILD',
+    'Progress begins\nwith a choice.',
+    9.88, 2.4, 7,
+    5.0, 2.8,
+    -Math.PI / 2
+  );
+
+  // SOUTH WALL
+
+  wallText(
+    'WHAT WILL WE\nLEAVE BEHIND?',
+    'The objects of today.\nThe history of tomorrow.',
+    7, 2.4, 9.88,
+    5.0, 2.8,
+    Math.PI
+  );
+
+  wallText(
+    'THE POWER\nOF PERSPECTIVE',
+    'Art helps us imagine\nwhat does not yet exist.',
+    -7, 2.4, 9.88,
+    5.0, 2.8,
+    Math.PI
+  );
+  
+  // WEST WALL — Museum introduction
+  wallText(
+    'MUSEUM OF\nTHE FUTURE',
+    'Artifacts from a\nfuture worth building.',
+    -9.88, 2.4, 7,
+    5.0, 2.8,
+    Math.PI / 2
+  );
+
+  wallText(
+    'DRIVING QUESTION',
+    'How can a “museum of the future,”\n' +
+    'featuring hypothetical artifacts\n' +
+    'and innovations that helped humanity\n' +
+    'address the climate crisis,\n' +
+    'inspire hope today?',
+    -9.88, 2.4, -7,
+    5.5, 3.2,
+    Math.PI / 2
+  );
 
   // add static obstacles with collision
   function addObstacle(x, z, width, depth) {
@@ -282,6 +428,29 @@ export function buildWorld(scene) {
       rect => circleHitsRect(x, z, radius, rect)
     );
   }
-
   return { canStand, addObstacle };
+}
+
+export function createGlobe(scene) {
+  const geometry = new THREE.SphereGeometry(
+    1.5, // Radius
+    48,   // Longitude segments
+    32    // Latitude segments
+  );
+
+  const material = new THREE.MeshBasicMaterial({
+    color: 0xa4bcc9,
+    wireframe: true,
+    transparent: false,
+    opacity: 0.65
+  });
+
+  const globe = new THREE.Mesh(geometry, material);
+
+  globe.position.set(0, 2.4, 0);
+  globe.rotation.z = THREE.MathUtils.degToRad(23.5);
+
+  scene.add(globe);
+
+  return globe;
 }

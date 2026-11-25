@@ -8,7 +8,11 @@
     "origin": "lol",
     "description": "cant stop the jack",
     "image": "images/artifact.png",
-    "position": [-22, 1.8, -4.82],
+    "position": [
+      -22,
+      1.8,
+      -4.82
+    ],
     "width": 2.4,
     "height": 1.6,
     "interactionDistance": 2.5
@@ -40,7 +44,7 @@
     "description": "This treaty was signed in 2063 in Rarotonga, Cook Islands by leaders from New Zealand, Australia, and the Cook Islands with the goal of securing protections for the Indigenous land and cultural heritage while addressing concerns regarding climate related disasters. The treaty includes regulations, financial support, and other guidelines for managing environmental guidelines under Indigenous leadership.",
     "wing": "policy",
     "position": [
-      27,
+      24,
       2.2,
       4.82
     ],
@@ -59,7 +63,7 @@
     "description": "This protest sign was used during the 2062 climate demonstrations in Rarotonga, Cook Islands, where families, youth activists, community elders, and local leaders gathered to protest the growing environmental destruction caused by climate change. Protesters demanded stronger protections for their ancestral lands, marine ecosystems, and cultural heritage, while calling for the restoration of Indigenous sovereignty and decision-making authority over their land and natural resources. The movement helped pave the way for the Cook Islands Climate and Indigenous Heritage Treaty of 2063.",
     "wing": "collective-action",
     "position": [
-      -18,
+      -15,
       2.2,
       -4.82
     ],
@@ -78,7 +82,7 @@
     "description": "Students in the Synthesis Program at the University of California, San Diego collaborated to develop innovative solutions to the urban heat island effect in San Diego County. Through research and teamwork, they designed a project focused on implementing green roofs to reduce urban temperatures and promote environmental sustainability. Their work demonstrated how student-led initiatives could address local climate challenges and inspire future environmental action that help lead our world to a more sustainable future.",
     "wing": "collective-action",
     "position": [
-      -27,
+      -24,
       2.2,
       4.82
     ],
@@ -97,20 +101,21 @@
     "description": "The first commercially successful atmospheric carbon removal system to combine passive air filtration with genetically engineered microorganisms capable of converting captured CO₂ into stable carbon compounds. These autonomous systems could operate in even the most remote environments, due to their small power draw and maintenance requirements. Their widespread deployment marked a turning point in humanity's efforts to reverse centuries of accumulated atmospheric carbon emissions.\n\nThis technology originated from a landmark scientific collaboration between African nations, whose joint exploration of previously uncharted subterranean cave networks led to the discovery of an extraordinary microbial ecosystem. Isolated within deep, carbon-rich caverns for millions of years, these microorganisms had evolved a unique metabolic process capable of converting atmospheric CO₂ into stable organic compounds. Through decades of genetic engineering, researchers transformed this natural adaptation into the foundation of modern atmospheric restoration technology.\n\nThe decommissioned purification cylinder displayed here houses one of the earliest engineered colonies of these CO₂-digesting microorganisms, achieving a carbon conversion efficiency of 56.3%. Contemporary descendants of these devices now achieve capture efficiencies of up to 99.996%, converting atmospheric carbon directly into nutrient-rich compounds that sustain their host colonies. This closed-loop biological process has eliminated the need for separate carbon storage devices.",
     "wing": "innovation",
     "position": [
-      -2.55,
       0,
-      -19.5
+      0,
+      -24.8
     ],
     "type": "model",
     "spinSpeed": 0.28,
-    "interactionDistance": 3.0,
+    "interactionDistance": 3.5,
     "models": [
       "models/filter.glb",
       "models/filter_cut.glb"
     ],
     "targetSize": 1.6,
     "pedestalWidth": 4.0,
-    "pedestalDepth": 1.8
+    "pedestalDepth": 1.8,
+    "image": "images/co2_levels.png"
   },
   {
     "id": "cloud-seeding-drone",
@@ -120,9 +125,9 @@
     "description": "The first commercially viable autonomous atmospheric water-harvesting and cloud-seeding system, developed to address the worsening water scarcity experienced across the Sahel and Sahara during the early 21st century. Combining advanced moisture-absorbing materials, high-altitude atmospheric monitoring, and coordinated fleets of cloud-seeding drones, the system marked a turning point in humanity's ability to manage freshwater availability in some of the world's most arid environments.\n\nThe craft displayed here is one of the original cloud-seeding drones deployed during the 2052 Nouakchott trials. Its lightweight composite housing contains an early-generation atmospheric sensor array, autonomous navigation system, and precision dispersal mechanism. These components enabled the drone to monitor local weather conditions and deliver targeted interventions with minimal human oversight.\n\nSubsequent generations incorporated improved moisture-capture materials, renewable-powered desalination, closed-loop water recycling, and regional atmospheric forecasting networks. By the late 21st century, these interconnected systems had become an essential component of water infrastructure across previously water-stressed settlements, reducing dependence on vulnerable underground aquifers.",
     "wing": "innovation",
     "position": [
-      2.55,
+      -3.7,
       0,
-      -19.5
+      -21.5
     ],
     "type": "model",
     "spinSpeed": 0.28,
@@ -140,11 +145,11 @@
     "year": 2094,
     "origin": "Pacific Island Coalition, deployed in Antarctica",
     "description": "This autonomous underwater anchor was recovered from the first successful ice-sheet stabilization network. It is constructed from corrosion-resistant composite alloys, and houses an autonomous control unit, seabed attachment mechanisms, and an array of hydraulic actuators. These technologies combined to position and maintain a network submerged barriers and supports, to halt the deterioration of the Antarctic coast. Its operation was supported by renewable-powered infrastructure and long-duration energy storage systems, allowing it to function for extended periods with minimal human intervention.\n\nDeveloped through decades of international research led by Pacific Island states facing existential threats from rising seas, the system slowed the retreat of vulnerable Antarctic glaciers by reducing the flow of relatively warm ocean water toward their grounding zones. Powered by renewable energy, robotic subsea structures redirected selected ocean currents and monitored ice movement in real time. Combined with aggressive global emissions reductions and atmospheric carbon removal, these systems helped humanity slow long-term sea-level rise.",
-    "wing": "innovation",
+    "wing": "collective-action",
     "position": [
+      -25,
       0,
-      0,
-      -29
+      0
     ],
     "type": "model",
     "spinSpeed": 0.28,
@@ -152,8 +157,222 @@
     "models": [
       "models/anchor.glb"
     ],
-    "targetSize": 1.9,
+    "targetSize": 4.5,
     "pedestalWidth": 2.1,
     "pedestalDepth": 2.1
+  },
+  {
+    "id": "co2-levels",
+    "title": "Atmospheric CO₂ Levels",
+    "year": "",
+    "origin": "",
+    "description": "",
+    "wing": "innovation",
+    "position": [
+      0,
+      2.1,
+      -27.82
+    ],
+    "type": "image",
+    "interactionDistance": 0,
+    "image": "images/co2_levels.png",
+    "width": 10,
+    "height": 4,
+    "rotationY": 0
+  },
+  {
+    "id": "plasma",
+    "title": "Compact Laser-Driven Plasma-Wakefield Energy Cell",
+    "year": 2044,
+    "origin": "Advanced Particle Physics Consortium",
+    "description": "This revolutionary clean energy generation unit adapts principles from high-energy particle accelerators, which take high-intensity, micro-scale laser pulses and fire them through an ionized gas (plasma) to drive powerful plasma waves. By adapting principles from modern particle accelerators, the system harnesses these extreme wave dynamics to extract and convert steady-state electrical power with zero emissions, acting as a compact, high-density energy source for industrial facilities.", 
+    "wing": "innovation",
+    "position": [
+      -4.82,
+      2.2,
+      -15.3
+    ],
+    "type": "image",
+    "interactionDistance": 3.5,
+    "image": "images/plasma.png",
+    "width": 5.5,
+    "height": 3.2,
+    "rotationY": 1.5707963267948966
+  },
+  {
+    "id": "fab-cap",
+    "title": "Closed-Loop Industrial Cleanroom Carbon Capture & Upcycling Unit",
+    "year": 2063,
+    "origin": "Global Semiconductor CleanTech Initiative",
+    "description": "Making computer chips and advanced electronics takes massive amounts of energy and generates significant greenhouse gas emissions. Instead of letting that pollution escape into the atmosphere, the Fab-Cap Converter attaches directly to factory exhaust pipes to trap concentrated carbon dioxide (CO2) right at the source. Using clean electricity, the unit breaks down the trapped gas on-site and transforms the carbon into raw building blocks for graphene (an ultra-strong, atom-thin material) and next-generation batteries. By turning factory exhaust into useful manufacturing ingredients, the system turns high-tech factories into self-sustaining, zero-emission loops.",
+    "wing": "innovation",
+    "position": [
+      4.82,
+      2.2,
+      -21.5
+    ],
+    "type": "image",
+    "interactionDistance": 3.5,
+    "image": "images/fab.png",
+    "width": 5.5,
+    "height": 3.2,
+    "rotationY": -1.5707963267948966
+  },
+  {
+    "id": "grid",
+    "title": "Room-Temperature Superconducting Power Transmission Core",
+    "year": 2092,
+    "origin": "International Grid Modernization Bureau",
+    "description": "A section of high-capacity power cable designed to transport electricity across massive distances without losing a single drop of energy along the way. Standard power lines suffer from \"friction\" (electrical resistance) that causes electricity to bleed away as heat. By using advanced engineered materials that completely eliminate this resistance, this technology allows clean energy generated in remote locations to power major cities thousands of miles away with close to 100% efficiency.",
+    "wing": "innovation",
+    "position": [
+      4.82,
+      2.2,
+      -15.3
+    ],
+    "type": "image",
+    "interactionDistance": 3.5,
+    "image": "images/grid.png",
+    "width": 5.5,
+    "height": 3.2,
+    "rotationY": -1.5707963267948966
+  },
+  {
+    "id": "posters",
+    "title": "Reuse, Reduce, Recycle Ordinance",
+    "year" : 2042,
+    "origin": "Brazil",
+    "description" : "A policy designed to reduce urban waste by replacing unnecessary plastics with sustainable, eco-friendly materials throughout the city. The ordinance completely banned single-use products and other disposables. These items were replaced with reusable and recyclable alternatives, successfully reducing landfill waste and halting plastic pollution in the city by over 30% in just six months.",
+    "wing" : "policy",
+    "position": [
+      15,
+      2.2,
+      4.82
+    ],
+    "type": "image",
+    "interactionDistance": 3.5,
+    "image": "images/recycle.png",
+    "width": 10,
+    "height": 3.5,
+    "rotationY" : 3.14
+  },
+  {
+    "id": "our-future-our-actions",
+    "title": "Our Future, Our Actions Campaign",
+    "year": 2030,
+    "origin": "United States",
+    "description": "A public awareness campaign designed to promote community-based environmental initiatives across the country. Advertisements promoted different local involvement opportunities, such as clothing swaps, educational programs, and cleanups in various environments, including beaches, parks, and forests.",
+    "wing": "collective-action",
+    "position": [-15, 2.2, 4.82],
+    "type": "image",
+    "interactionDistance": 3.5,
+    "image": "images/combined.png",
+    "width": 7.0,
+    "height": 3.6,
+    "rotationY": 3.141592653589793
+  },
+  {
+    "id": "community-garden-network",
+    "title": "The Community Garden Network",
+    "year": 2065,
+    "origin": "Tokyo, Japan",
+    "description": "An expansion of community-based urban agriculture designed to support local food resources, improve environmental conditions, and promote togetherness through community involvement. The Garden Network granted citizens all across Tokyo more access to healthy, fresh produce without the high costs.",
+    "wing": "collective-action",
+    "position": [-25, 2.2, -4.82],
+    "type": "image",
+    "interactionDistance": 3.5,
+    "image": "images/garden.png",
+    "width": 4.5,
+    "height": 3.2,
+    "rotationY": 0
+  },
+  {
+    "id": "last-plastic-bottle",
+    "title": "The Last Plastic Bottle",
+    "year": "2095 (Speculative)",
+    "origin": "Pacific Ocean",
+    "description": "Recovered from the Pacific Ocean in 2095, this plastic bottle is one of the few remaining objects from an era when single-use plastics were an inseparable part of everyday life. During the 20th and early 21st centuries, plastic bottles were purchased, used and thrown away in enormous quantities often without much thought about where they would end up. What made them so convenient was also what made them so destructive: an object used for only a few minutes could remain in the environment for centuries. The environmental cost of plastic bottles began long before they reached consumers. Their production relied heavily on fossil fuels, contributing to greenhouse gas emissions and accelerating climate change. Billions of discarded bottles accumulated in oceans, rivers, and landfills across the world. Over time, these plastics broke down into smaller particles known as microplastics, contaminating water sources and entering food chains. Marine animals were particularly vulnerable, with many suffering from the ingestion of plastic waste or becoming entangled in discarded plastic materials. The burden of plastic pollution was also unevenly distributed. Communities located near plastic manufacturing facilities and waste disposal sites were often exposed to higher levels of pollution, despite having contributed relatively little to the problem themselves. Plastic pollution became not only an environmental concern but also an issue of public health and environmental justice. The transition away from single-use plastic bottles did not happen overnight. Years of environmental advocacy, international agreements, stricter regulations and growing public awareness gradually changed the way societies approached consumption. Reusable bottles and public water refill stations became increasingly accessible, while manufacturers were held accountable for the waste generated by their products. These changes helped reduce dependence on disposable packaging and prevent further damage to the world's ecosystems. \n\n Today, this bottle is preserved in the museum not because it was rare or valuable during its time, but precisely because it was so ordinary. It represents a period in human history when the long-term consequences of everyday choices were often overlooked in favor of immediate convenience. Once discarded without a second thought, it now serves as a reminder of how even the smallest changes in human behavior, when adopted on a global scale, can have a lasting impact on the planet.",
+    "wing": "art-culture",
+    "position": [0, 0, 25],
+    "type": "model",
+    "spinSpeed": 0.18,
+    "interactionDistance": 3.5,
+    "models": ["models/bottle.glb"],
+    "pedestalWidth": 4.0,
+    "pedestalDepth": 1.6,
+    "pedestalHeight": 1.3
+  },
+  {
+    "id": "coca-cola-baby",
+    "title": "Coca-Cola Baby",
+    "year": 2025,
+    "origin": "University of California, San Diego",
+    "type": "image",
+    "wing": "art-culture",
+    "position": [4.82, 2.2, 13.5],
+    "rotationY": -1.5707963267948966,
+    "interactionDistance": 3.5,
+    "image": "images/baby.png",
+    "width": 4.2,
+    "height": 3.2,
+    "description": "Creators: Teren Li, Sion Lee, Shubham Patra, Jay-R Burgos, and Enkhbayasgalan Munkhtur.\n\nCreated by five SYN 100 students at the University of California, San Diego, Coca-Cola Baby sheds light on the environmental and social injustices faced by residents of San Cristóbal de las Casas, Chiapas, Mexico. Made from discarded Coca-Cola cans, the artwork depicts an infant with a can lid resembling a pacifier, symbolizing how deeply Coca-Cola had become a part of everyday life in the community, even from a young age.\n\nDuring the early 21st century, residents of San Cristóbal struggled to access clean drinking water while large quantities of water were extracted for commercial beverage production. For many families, Coca-Cola was more accessible than safe drinking water. This dependence contributed to serious health concerns, including diabetes, and exposed inequalities in access to essential natural resources. Through their artwork and accompanying video essay, the students encouraged viewers to look beyond familiar corporate branding and question the environmental and human costs behind everyday consumer products. Their project brought attention to the need for corporate accountability and the importance of clean water as a basic human right.\n\nThis artifact serves as a reminder that the movement toward a more sustainable and equitable future was shaped not only by scientists, policymakers, and large organizations, but also by students, artists, and individuals who chose to speak out against the injustices of their time."
+  },
+  {
+    "id": "species-we-almost-lost",
+    "title": "The Species We Almost Lost",
+    "year": 2024,
+    "origin": "India",
+    "type": "image",
+    "wing": "art-culture",
+    "position": [-4.82, 2.2, 13.5],
+    "rotationY": 1.5707963267948966,
+    "interactionDistance": 3.5,
+    "image": "images/bears.png",
+    "width": 4.8,
+    "height": 3.2,
+    "description": "Artist: Jiya Watts.\n\nThis artwork shows a mother polar bear and her cub standing together on Arctic sea ice, with a blazing sunset behind them. It was painted at a time when climate change was pushing polar bears toward the edge, and it captures the beauty of a habitat that was disappearing fast.\n\nIn the early 21st century, rising global temperatures melted Arctic sea ice at an alarming rate. Polar bears relied on that ice to hunt seals, to travel, and to raise their young. As it shrank, many had to cover far greater distances to find food, which meant long stretches of starvation, fewer successful births, and fewer cubs surviving. The prospect of losing polar bears became one of the most recognizable symbols of what global warming could cost us. The mother and cub here stand for all the generations of wildlife whose fate rested on the choices humanity made about the environment. The rich colors of the sky and the calm Arctic landscape carry a note of hope, imagining a future where these animals could keep thriving in the wild.\n\nNow preserved in this museum, the painting is a reminder of what we once stood to lose. It comes from a period when cutting greenhouse gas emissions, protecting natural habitats, and acting together on climate had become urgent. Saving the polar bear was never only about one species. It was about protecting a whole ecosystem and about making sure future generations would inherit a world where creatures this extraordinary still lived beyond the walls of a museum and didn’t become just history."
+  },
+  {
+    "id": "day-the-chimneys-fell-silent",
+    "title": "THE DAY THE CHIMNEY'S FELL SILENT",
+    "year": "November 15, 2090",
+    "origin": "Alabama, United States",
+    "type": "image",
+    "wing": "art-culture",
+    "position": [4.82, 2.2, 20.5],
+    "rotationY": -1.5707963267948966,
+    "interactionDistance": 3.5,
+    "image": "images/coal.png",
+    "width": 6.8,
+    "height": 3.0,
+    "description": "This preserved newspaper front page commemorates a defining moment in environmental history: the permanent closure of the James H. Miller Jr. Electric Generating Plant, marking the end of coal-fired electricity generation in the United States. During the early 21st century, the plant was recognized as the largest source of reported greenhouse gas emissions from a single facility in the United States. In 2022 alone, it released approximately 22 million metric tons of greenhouse gases, measured in carbon dioxide equivalent. Even in 2024, it remained the nation's highest emitting facility, releasing over 19 million metric tons of greenhouse gases.\n\nFor decades, coal-fired power plants supplied electricity to millions of households and industries, but at an immense environmental and human cost. The burning of coal released vast quantities of greenhouse gases into the atmosphere, accelerating global warming and contributing to rising sea levels, extreme weather events, melting glaciers, and the destruction of natural ecosystems. Beyond its contribution to climate change, coal combustion released harmful air pollutants associated with respiratory and cardiovascular diseases, while coal mining and waste disposal threatened surrounding landscapes and water sources. Communities located near these industrial facilities often bore a disproportionate share of the environmental and public health consequences.\n\nThe closure of the James H. Miller Jr. plant in 2090 marked the culmination of decades of scientific advancements, environmental legislation, public advocacy, and investment in cleaner energy infrastructure. The widespread adoption of renewable energy, advancements in energy storage, and policies supporting workers and communities through the transition made it possible to move beyond a system that had long prioritized energy production at the expense of environmental and human well-being.\n\nPreserved as a historical record of this monumental transition, the newspaper represents far more than the closure of a single power plant. It marks the end of an era in which environmental destruction was accepted as a necessary cost of industrial progress. What was once considered indispensable to modern civilization became a relic of its past, demonstrating humanity's capacity to challenge deeply established systems and redefine progress for generations to come."
+  },
+  {
+    "id": "two-sides-one-blanket",
+    "title": "Two Sides, One Blanket",
+    "year": 2025,
+    "origin": "University of California, San Diego",
+    "description": "An educational art project created by Synthesis students at UC San Diego targeting circular fashion and its potential positive impact on the climate crisis. This infinity blanket has two contrasting sides, one using raw and one using upcycled materials to demonstrate the life cycle of clothing. This project raised awareness about fast fashion and overconsumption, showcasing a future for sustainable fashion.",
+    "wing": "art-culture",
+    "position": [-4.82, 2.2, 20.5],
+    "type": "image",
+    "interactionDistance": 3.5,
+    "image": "images/blanket.png",
+    "width": 5.5,
+    "height": 3.4,
+    "rotationY": 1.5707963267948966
+  },
+  {
+    "id": "foyer-globe",  
+    "comment" : "lol",
+    "title": "Earth",
+    "wing": "foyer",
+    "type": "model",
+    "position": [0, 0, 0],
+    "models": [],
+    "interactionDistance": 0,
+    "pedestalWidth": 2.5,
+    "pedestalDepth": 2.5,
+    "pedestalHeight": 0.7
   }
 ]

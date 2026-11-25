@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
-import { buildWorld, SPAWN_POINTS } from './world.js';
+import { buildWorld, SPAWN_POINTS, createGlobe } from './world.js';
 import { loadExhibits } from './exhibits.js';
 import { updateModels } from './modelLoader.js';
 import './style.css';
@@ -13,6 +13,7 @@ const DEFAULT_SPAWN = 'foyer';
 const requestedSpawn = new URLSearchParams(window.location.search).get('spawn');
 const spawnName = Object.hasOwn(SPAWN_POINTS, requestedSpawn) ? requestedSpawn : DEFAULT_SPAWN;
 camera.position.copy(SPAWN_POINTS[spawnName]);
+camera.rotation.y = Math.PI / 2; // look at the fuller exhibits lol
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(innerWidth, innerHeight);
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -22,8 +23,9 @@ const sun = new THREE.DirectionalLight(0xffffff, 1.5);
 sun.position.set(3, 8, 5);
 scene.add(sun);
 const perfMonitor = createPerformanceMonitor(renderer);
-
 const world = buildWorld(scene);
+const globe = createGlobe(scene);
+
 let exhibits = [];
 try {
   // Exhibit metadata is bundled by Vite; no fetch/404/HTML-as-JSON errors.
@@ -112,6 +114,7 @@ function updateMovement(dt) {
   } else {
     camera.position.y = PLAYER_HEIGHT;
   }
+  globe.rotation.y += 0.15 * dt;
 }
 
 function updateInteraction() {
@@ -133,9 +136,17 @@ function updateInteraction() {
   }
 }
 
+const WING_NAMES = {
+  "innovation": "Innovation & Technology",
+  "policy": "Policy & Infrastructure",
+  "collective-action": "Collective Action & Activism",
+  "art-culture": "Art & Culture"
+};
+
 function openExhibit(item) {
   readingExhibit = true;
   clearKeys();
+  document.getElementById('exhibit-wing').textContent = (WING_NAMES[item.wing] || 'Museum Collection').toUpperCase();
   document.getElementById('exhibit-title').textContent = item.title;
   document.getElementById('exhibit-meta').textContent =
     `${item.year || ''} | ${item.origin || ''}`;
