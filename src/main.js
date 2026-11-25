@@ -286,7 +286,7 @@ function updateInteraction() {
     }
   }
   if (activeExhibit) {
-    const interactKey = inputMode === 'gamepad' ? 'A' : 'E';
+    const interactKey = inputMode === 'gamepad' ? 'X' : 'E';
 
     interactionPrompt.textContent = `${activeExhibit.title}\n[ ${interactKey} ] Read exhibit`;
     interactionPrompt.hidden = false;
