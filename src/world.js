@@ -292,11 +292,17 @@ export function buildWorld(scene) {
     // Smaller supporting text
     const subtitleLines = subtitle.split('\n');
 
+    const startY = H * 0.63;
+    const lineSpacing = Math.min(
+      H * 0.10,
+      H * 0.30 / Math.max(1, subtitleLines.length - 1)
+    );
+
     subtitleLines.forEach((line, i) => {
       drawText(
         line,
-        H * 0.68 + i * H * 0.10,
-        H * 0.085,
+        startY + i * lineSpacing,
+        Math.min(H * 0.085, lineSpacing * 0.85),
         'normal',
         '#52675b'
       );
@@ -393,8 +399,8 @@ export function buildWorld(scene) {
     'and innovations that helped humanity\n' +
     'address the climate crisis,\n' +
     'inspire hope today?',
-    -9.88, 2.4, -7,
-    5.5, 3.2,
+    -9.88, 2.2, -7,
+    5.0, 3.2,
     Math.PI / 2
   );
 
